@@ -575,22 +575,34 @@ function traerSeguimiento(cliente){
 
 async function editarSeguimientoCliente() {
   try {
-    let nuevoSeguimiento = {
-      fecha: Date.now(),
-      peso: peso.value,
-      estatura: estatura.value,
-      brazo: brazo.value,
-      pierna: pierna.value,
-      cintura: cintura.value,
-      imc: `${peso.value / (estatura.value * estatura.value)}`
+    console.log(peso.value);
+    if(!peso.value){
+      Notify.create('Por favor ingrese un Peso')
+    }else if(!estatura.value){
+      Notify.create('Por favor ingrese una altura')
+    }else if(!brazo.value){
+      Notify.create('Por favor ingrese una medida de brazo')
+    }else if(!pierna.value){
+      Notify.create('Por favor ingrese una medida de pierna')
+    }else if(!cintura.value){
+      Notify.create('Por favor ingrese una medida de cintura')
+    }else{
+      let nuevoSeguimiento = {
+        fecha: Date.now(),
+        peso: peso.value,
+        estatura: estatura.value,
+        brazo: brazo.value,
+        pierna: pierna.value,
+        cintura: cintura.value,
+        imc: `${peso.value / (estatura.value * estatura.value)}`
+      }
+      seguimiento.value.push(nuevoSeguimiento)
+      modalInfoSeg.value = false
+      await useCliente.putCliente(idSeg.value, {
+        seguimiento: seguimiento.value
+      })
+      listarClientes()
     }
-    seguimiento.value.push(nuevoSeguimiento)
-    modalInfoSeg.value = false
-    await useCliente.putCliente(idSeg.value, {
-      seguimiento: seguimiento.value
-    })
-    listarClientes()
-
   } catch (error) {
     console.error('Error de cliente', error)
     Notify.create('Ocurrio un error al editar el cliente')
