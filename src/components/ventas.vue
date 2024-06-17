@@ -59,9 +59,21 @@
                 <template v-slot:body-cell-opciones="props">
                     <q-td :props="props">
                         <div style="display: flex; gap:15px; justify-content: center;">
-                            <q-btn color="primary" @click="traerVentas(props.row)"><i class="fas fa-pencil-alt"></i></q-btn>
-                            <q-btn v-if="props.row.estado == 1" @click="deshabilitar(props.row)" color="negative"><i class="fas fa-times"></i></q-btn>
-                            <q-btn v-else  @click="habilitarVentas(props.row)" color="positive"><i class="fas fa-check"></i></q-btn>
+                            <q-btn color="primary" @click="traerVentas(props.row)">
+                                <q-tooltip>
+                                    Editar
+                                </q-tooltip>
+                                <i class="fas fa-pencil-alt"></i></q-btn>
+                            <q-btn v-if="props.row.estado == 1" @click="deshabilitar(props.row)" color="negative">
+                                <q-tooltip>
+                                    Inactivar
+                                </q-tooltip>
+                                <i class="fas fa-times"></i></q-btn>
+                            <q-btn v-else  @click="habilitarVentas(props.row)" color="positive">
+                                <q-tooltip>
+                                    Activar
+                                </q-tooltip>
+                                <i class="fas fa-check"></i></q-btn>
                         </div>
                     </q-td>
                 </template>
@@ -115,7 +127,11 @@ const columns = ref([
         sortable: true,
         format: (val) => {
             const fecha = new Date(val);
-            return fecha.toLocaleDateString();
+            return fecha.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+            })
         }
     },
     {
@@ -207,8 +223,8 @@ async function listarVentasInactivas(){
 }
 
 async function listarProductos() {
-    const data = await useProducto.listarProductos()
-    data.data.producto.forEach(item => {
+    const data = await useProducto.listarProductoActivo()
+    data.data.productos.forEach(item => {
         dates = {
             label: item.codigo,
             value: item._id

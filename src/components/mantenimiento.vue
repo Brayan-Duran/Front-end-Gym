@@ -100,11 +100,23 @@
                 <template v-slot:body-cell-opciones="props">
                     <q-td :props="props">
                         <div style="display: flex; gap:15px; justify-content: center;">
-                            <q-btn color="primary" @click="traerMantenimiento(props.row)"><i
+                            <q-btn color="primary" @click="traerMantenimiento(props.row)">
+                                <q-tooltip>
+                                    Editar
+                                </q-tooltip>
+                                <i
                                     class="fas fa-pencil-alt"></i></q-btn>
                             <q-btn v-if="props.row.estado == 1" @click="deshabilitarMantenimiento(props.row)"
-                                color="negative"><i class="fas fa-times"></i></q-btn>
-                            <q-btn v-else @click="habilitarMantenimiento(props.row)" color="positive"><i
+                                color="negative">
+                                <q-tooltip>
+                                    Inactivar
+                                </q-tooltip>
+                                <i class="fas fa-times"></i></q-btn>
+                            <q-btn v-else @click="habilitarMantenimiento(props.row)" color="positive">
+                                <q-tooltip>
+                                    Activar
+                                </q-tooltip>
+                                <i
                                     class="fas fa-check"></i></q-btn>
                         </div>
                     </q-td>
@@ -178,7 +190,11 @@ const columns = ref([
         // prueba de lectura de fecha
         format: (val) => {
             const fecha = new Date(val);
-            return fecha.toLocaleDateString();
+            return fecha.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+            })
         }
     },
     {
@@ -299,8 +315,8 @@ async function listarValorMantenimiento(){
 }
 
 async function listarMaquinas() {
-    const data = await useMaquina.listarMaquinas()
-    data.data.maquina.forEach(item => {
+    const data = await useMaquina.listarMaquinasActivos()
+    data.data.maquinas.forEach(item => {
         dates = {
             label: item.codigo,
             value: item._id

@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 import { ref } from "vue";
+import { Notify } from "quasar";
 
 export const useUsuarioStore = defineStore("usuarios", () => {
     let token = ref("")
@@ -153,6 +154,12 @@ export const useUsuarioStore = defineStore("usuarios", () => {
             return res;
         } catch (error) {
             console.log(error);
+            Notify.create({
+                message: "El correo o la cotraseña son incorrectas",
+                position: "top",
+                color: 'red',
+                timeout: 4000
+            })
             return error;
         }
     }

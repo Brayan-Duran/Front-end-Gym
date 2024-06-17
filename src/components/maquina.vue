@@ -57,10 +57,22 @@
         <template v-slot:body-cell-opciones="props">
           <q-td :props="props">
             <div style="display: flex; gap:15px; justify-content: center;">
-              <q-btn color="primary" @click="traerinfo(props.row)"><i class="fas fa-pencil-alt"></i></q-btn>
-              <q-btn v-if="props.row.estado == 1" @click="deshabilitarsede(props.row)" color="negative"><i
+              <q-btn color="primary" @click="traerinfo(props.row)">
+                <q-tooltip>
+                    Editar
+                </q-tooltip>
+                <i class="fas fa-pencil-alt"></i></q-btn>
+              <q-btn v-if="props.row.estado == 1" @click="deshabilitarsede(props.row)" color="negative">
+                <q-tooltip>
+                    Inactivo
+                </q-tooltip>
+                <i
                   class="fas fa-times"></i></q-btn>
-              <q-btn v-else @click="habilitarmaquina(props.row)" color="positive"><i class="fas fa-check"></i></q-btn>
+              <q-btn v-else @click="habilitarmaquina(props.row)" color="positive">
+                <q-tooltip>
+                    Activar
+                </q-tooltip>
+                <i class="fas fa-check"></i></q-btn>
             </div>
           </q-td>
         </template>
@@ -111,7 +123,11 @@ const columns = ref([
     sortable: true,
     format: (val) => {
       const fechaIngreso = new Date(val)
-      return fechaIngreso.toLocaleDateString()
+      return fechaIngreso.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+            })
     }
   },
   {
@@ -123,7 +139,11 @@ const columns = ref([
     sortable: true,
     format: (val) => {
       const fechaUltimoMantenimiento = new Date(val)
-      return fechaUltimoMantenimiento.toLocaleDateString()
+      return fechaUltimoMantenimiento.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+            })
     }
   },
   {
@@ -176,7 +196,7 @@ async function listarMaquinasInactivas(){
 
 
 async function listarSedes() {
-  const data = await useSede.listarSedes()
+  const data = await useSede.listarSedesActivo()
   data.data.sede.forEach(item => { // se puede lograr de esta forma directamente en el componente
     dates = {
       label: item.codigo,

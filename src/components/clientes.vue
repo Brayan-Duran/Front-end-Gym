@@ -15,8 +15,12 @@
           </q-card-section>
           <q-input outlined v-model="nombre" label="Ingrese el nombre del Cliente" class="q-my-md q-mx-md" type="text" />
           <q-input outlined v-model="fechaNacimiento" label="Ingrese el Cumple del Cliente" class="q-my-md q-mx-md"
-            type="date" />
-          <q-input outlined v-model="edad" label="Ingrese la edad del Cliente" class="q-my-md q-mx-md" type="tel" />
+            type="date" :max="today" />
+            <q-field filled :dense="false" disable class="q-my-md q-mx-md">
+              <template v-slot:control >
+                <div>{{ calculateAge }}</div>
+              </template>
+            </q-field>
           <q-input outlined v-model="documento" label="Ingrese el Documento del Cliente" class="q-my-md q-mx-md"
             type="tel" required pattern="[0-9]+" maxlength="10" />
           <q-input outlined v-model="direccion" label="Ingrese la direccion del Cliente" class="q-my-md q-mx-md"
@@ -34,9 +38,9 @@
             </template>
           </q-select>
           <q-input outlined v-model="foto" label="Ingrese la foto del Cliente" class="q-my-md q-mx-md" type="text" />
-          <q-input outlined v-model="objetivo" label="Ingrese el objetivo del Cliente" class="q-my-md q-mx-md"
+          <q-input autogrow outlined v-model="objetivo" label="Ingrese el objetivo del Cliente" class="q-my-md q-mx-md"
             type="text" />
-          <q-input outlined v-model="observaciones" label="Ingrese las observacionesdel Cliente" class="q-my-md q-mx-md"
+          <q-input autogrow outlined v-model="observaciones" label="Ingrese las observacionesdel Cliente" class="q-my-md q-mx-md"
             type="text" />
           <q-card-actions align="right">
             <q-btn v-if="accion === 1" @click="validarCliente()" color="red" class="text-white"
@@ -79,16 +83,23 @@
     <div>
       <q-dialog v-model="modalInfoSeg" persistent>
         <q-card style="width: 800px;">
-          <q-card-section style="background-color: #a1312d; margin-bottom: 20px">
-            <div class="text-h6 text-white">
-              Seguimientos de {{ nombreSeg }} 
-            </div>
+          <q-card-section horizontal style="background-color: #a1312d; margin-bottom: 20px">
+            <q-card-section>
+              <div class="text-h6 text-white">
+                Seguimientos de {{ nombreSeg }} 
+              </div>
+            </q-card-section>
+            <q-card-section class="text-rigth col-5">
+              <q-avatar size="50px">
+                <img :src="imgCliente">
+              </q-avatar>
+            </q-card-section>
           </q-card-section>
             <q-input outlined v-model="peso" label="Ingrese el peso del Cliente" class="q-my-md q-mx-md" type="number" />
             <q-input outlined v-model="estatura" label="Ingrese la altura del Cliente" class="q-my-md q-mx-md" type="number" />
             <q-field filled :dense="false" disable class="q-my-md q-mx-md">
               <template v-slot:control >
-                <div v-if="peso && estatura " class="self-center full-width no-outline">{{  peso / (estatura * estatura)  }}</div>
+                <div v-if="peso && estatura" class="self-center full-width no-outline"> {{ (peso / (estatura * estatura)).toFixed(2) }} </div>
               </template>
             </q-field>
             <!-- <q-input outlined v-model="imc" label="Ingrese la altura del Cliente" class="q-my-md q-mx-md" type="text" /> -->
@@ -129,14 +140,30 @@
                 </q-tooltip>
               </q-btn>
               <!-- botons de activado y desactivado -->
-              <q-btn v-if="props.row.estado == 1" @click="deshabilitarCliente(props.row)" color="negative"><i
+              <q-btn v-if="props.row.estado == 1" @click="deshabilitarCliente(props.row)" color="negative">
+                <q-tooltip>
+                    Inactivar
+                </q-tooltip>
+                <i
                   class="fas fa-times"></i></q-btn>
-              <q-btn v-else color="positive" @click="habilitarCliente(props.row)"><i class="fas fa-check"></i></q-btn>
+              <q-btn v-else color="positive" @click="habilitarCliente(props.row)">
+                <q-tooltip>
+                    Activar
+                </q-tooltip>
+                <i class="fas fa-check">
+              </i></q-btn>
               <!-- botones de seguimiento -->
               <q-btn color="teal" @click="traerSeguimiento(props.row)">
-                <i class="fas fa-eye" ></i>
+                <q-tooltip>
+                    Ver Seguimientos
+                </q-tooltip>
+                <i class="fas fa-eye">
+                </i>
               </q-btn>
-              <q-btn color="pink" @click="modalInfoSeg = true">
+              <q-btn color="pink" @click="traerData(props.row)">
+                <q-tooltip>
+                    Agregar Seguimientos
+                </q-tooltip>
                 <i class="fas fa-plus" ></i>
               </q-btn>
             </div>
@@ -151,7 +178,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { Notify } from 'quasar';
 import { useStoreCliente } from '../stores/clientes'
 import { useStorePlan } from '../stores/planes'
@@ -181,6 +208,9 @@ let brazo = ref("")
 let pierna = ref("")
 let cintura = ref("")
 let idSeg = ref("")
+let today = new Date().toISOString().split('T')[0]
+const birthDate = ref(null);
+let imgCliente = ref("")
 
 let columnSeguimiento = ref([
 {
@@ -289,8 +319,11 @@ const columns = ref([
     sortable: true,
     format: (val) => {
       const fechaIngreso = new Date(val)
-      return fechaIngreso.toLocaleDateString()
-    }
+      return fechaIngreso.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    })}
   },
   {
     name: 'edad',
@@ -308,8 +341,12 @@ const columns = ref([
     field: (row) => row.fechaIngreso.split("T")[0],
     sortable: true,
     format: (val) => {
-      const fechaIngreso = new Date(val)
-      return fechaIngreso.toLocaleDateString()
+      const fechaIngreso = new Date(val);
+      return fechaIngreso.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+  });
     }
   },
   {
@@ -349,14 +386,6 @@ const columns = ref([
     sortable: true,
   },
   {
-    name: ' foto',
-    required: true,
-    label: 'Foto Cliente',
-    align: 'center',
-    field: 'foto',
-    sortable: true,
-  },
-  {
     name: 'objetivo',
     required: true,
     label: 'Objetivo Cliente',
@@ -389,7 +418,11 @@ const columns = ref([
     sortable: true,
     format: (val) => {
       const fechaVencimiento = new Date(val)
-      return fechaVencimiento.toLocaleDateString()
+      return fechaVencimiento.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+      })
     }
 
   },
@@ -411,6 +444,28 @@ const columns = ref([
   },
 
 ])
+
+function traerData (data) {
+  modalInfoSeg.value = true
+  nombreSeg.value = data.nombre
+  imgCliente.value = data.foto
+  console.log(data.foto);
+}
+
+
+const calculateAge = computed(() => {
+  if (fechaNacimiento.value) {
+    const birthday = new Date(fechaNacimiento.value);
+    const today = new Date();
+    let age = today.getFullYear() - birthday.getFullYear();
+    const m = today.getMonth() - birthday.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthday.getDate())) {
+      age--;
+    }
+    return age;
+  }
+  return '';
+});
 
 async function listarClientes() {
   const r = await useCliente.listarClientes()
@@ -443,7 +498,7 @@ function filterFn(val, update, abort) {
 }
 
 async function listarPlanes() {
-  const data = await usePlan.listarPlanes()
+  const data = await usePlan.listarPlanesActivos()
   data.data.planes.forEach(item => {
     dates = {
       label: item.descripcion,
@@ -457,17 +512,16 @@ async function listarPlanes() {
 function validarCliente() {
   let validacionnumeros = /^[0-9]+$/;
 
-
   if (nombre.value == "") {
     Notify.create("Se debe agregar un nombre del Cliente");
 
   } else if (fechaNacimiento.value == "") {
     Notify.create("Se debe agregar la fecha de nacimiento del Cliente");
 
-  } else if (edad.value == "") {
+  } else if (calculateAge.value == "") {
     Notify.create("Se debe agregar la edad del Cliente");
 
-  } else if (!validacionnumeros.test(edad.value)) {
+  } else if (!validacionnumeros.test(calculateAge.value)) {
     Notify.create("La edad debe ser un numero");
 
   } else if (documento.value == "") {
@@ -547,7 +601,7 @@ async function agregarCliente() {
   const r = await useCliente.postClientes({
     nombre: nombre.value,
     fechaNacimiento: fechaNacimiento.value,
-    edad: edad.value,
+    edad: calculateAge.value,
     documento: documento.value,
     direccion: direccion.value,
     telefono: telefono.value,
@@ -597,7 +651,6 @@ function traerCliente(cliente) {
   id.value = cliente._id
   nombre.value = cliente.nombre
   fechaNacimiento.value = cliente.fechaNacimiento.split("T")[0]
-  edad.value = cliente.edad
   documento.value = cliente.documento
   direccion.value = cliente.direccion
   telefono.value = cliente.telefono
@@ -620,10 +673,10 @@ function validarEdicionCliente() {
   } else if (fechaNacimiento.value == "") {
     Notify.create("Se debe agregar la fecha de nacimiento del Cliente");
 
-  } else if (edad.value == "") {
+  } else if (calculateAge.value == "") {
     Notify.create("Se debe agregar la edad del Cliente");
 
-  } else if (!validacionnumeros.test(edad.value)) {
+  } else if (!validacionnumeros.test(calculateAge.value)) {
     Notify.create("La edad debe ser un numero");
 
   } else if (documento.value == "") {
@@ -671,7 +724,7 @@ async function editarcliente() {
     await useCliente.putCliente(id.value, {
       nombre: nombre.value,
       fechaNacimiento: fechaNacimiento.value,
-      edad: edad.value,
+      edad: calculateAge.value,
       documento: documento.value,
       direccion: direccion.value,
       telefono: telefono.value,

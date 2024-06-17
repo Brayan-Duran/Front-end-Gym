@@ -55,12 +55,24 @@
         <q-td :props="props">
             <div style="display: flex; gap:15px; justify-content: center;">
                 <!-- boton de editar -->
-                <q-btn color="primary" @click="traerInfo(props.row)" ><i
+                <q-btn color="primary" @click="traerInfo(props.row)" >
+                    <q-tooltip>
+                        Editar
+                    </q-tooltip>
+                    <i
                         class="fas fa-pencil-alt"></i></q-btn>
                 <!-- botons de activado y desactivado -->
-                <q-btn v-if="props.row.estado == 1" @click="desabilitarSedes(props.row)" color="negative"><i
+                <q-btn v-if="props.row.estado == 1" @click="desabilitarSedes(props.row)" color="negative">
+                    <q-tooltip>
+                        Inacticar
+                    </q-tooltip>
+                    <i
                         class="fas fa-times"></i></q-btn>
-                <q-btn v-else @click="habilitarSedes(props.row)" color="positive"><i
+                <q-btn v-else @click="habilitarSedes(props.row)" color="positive">
+                    <q-tooltip>
+                        Acticar
+                    </q-tooltip>
+                    <i
                         class="fas fa-check"></i></q-btn>
             </div>
         </q-td>

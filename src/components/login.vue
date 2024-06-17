@@ -9,16 +9,17 @@
                 <h2>INGRESAR</h2>
                 <q-form @submit="login2">
 
-                    <div class="input-box">
-                        <span class="icon"><i class="fas fa-envelope"></i></span>
-                        <input type="text" v-model="email">
-                        <label for="">Correo</label>
-                    </div>
-                    <div class="input-box">
-                        <span class="icon"><i class="fas fa-lock"></i></span>
-                        <input type="password" v-model="passwordLogin">
-                        <label for="">Contraseña</label>
-                    </div>
+                    <q-input class="q-mt-sm" outlined v-model="email" label="Correo electronico" lazy-rules
+                         :rules="[val => val && val.length > 0 || 'Porfavor ingresa tu correo']">
+                    </q-input>
+                    <q-input outlined class="q-mt-md" v-model="passwordLogin" label="Contraseña"
+                         :type="isPwd ? 'password' : 'text'" :rules="[
+                         val => val !== null && val !== '' || 'Por favor ingresa tu contraseña'
+                          ]">
+                         <template v-slot:append>
+                      <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
+                         </template>
+                     </q-input>
                     <button class="btn" type="submit">Ingresar</button>
                    
                 </q-form>
@@ -33,10 +34,12 @@
 import { ref } from 'vue';
 import { useUsuarioStore } from '../stores/usuarios';
 import { useRouter } from "vue-router";
+import { Notify } from 'quasar';
 const router = useRouter();
 let useUsuario = useUsuarioStore()
 let email = ref("");
 let passwordLogin = ref("")
+let isPwd = ref(true)
 
 
 
@@ -52,7 +55,6 @@ async function login2() {
 
         router.push('/menu');
     } catch (error) {
-        console.log(error);
     }
 }
 
