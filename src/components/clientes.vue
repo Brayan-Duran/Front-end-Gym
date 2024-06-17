@@ -573,6 +573,14 @@ function traerSeguimiento(cliente){
   seguimiento.value = cliente.seguimiento
 }
 
+function limpiarSeg() {
+  peso.value = ""
+  estatura.value = ""
+  brazo.value = ""
+  pierna.value =  ""
+  cintura.value = ""
+}
+
 async function editarSeguimientoCliente() {
   try {
     console.log(peso.value);
@@ -602,6 +610,7 @@ async function editarSeguimientoCliente() {
         seguimiento: seguimiento.value
       })
       listarClientes()
+      limpiarSeg()
     }
   } catch (error) {
     console.error('Error de cliente', error)
