@@ -71,6 +71,13 @@
             </div>
           </q-card-section>
           <q-table v-if="seguimiento.length > 0" table-header-class="text-black font-weight-bold" :rows="seguimiento" :columns="columnSeguimiento" row-key="name" >
+            <template v-slot:body-cell-imcc="props">
+              <q-td :props="props">
+                <div v-if="parseFloat(props.row.imc) < 18.5" class="text-blue">{{ parseFloat(props.row.imc).toFixed(2) }} Bajo Peso</div>
+                <div v-if="parseFloat(props.row.imc) > 18.6 && parseFloat(props.row.imc) < 24.9" class="text-green">{{ parseFloat(props.row.imc).toFixed(2) }} Normal</div>
+                <div v-if="parseFloat(props.row.imc) >= 25" class="text-orange">{{ parseFloat(props.row.imc).toFixed(2) }} Sobre Peso</div>
+              </q-td>
+            </template>
           </q-table>
           <h4 v-else>El usuario {{ nombreSeg }} no cuenta con seguimientos</h4>
           <q-card-actions align="right">
@@ -99,7 +106,18 @@
             <q-input outlined v-model="estatura" label="Ingrese la altura del Cliente" class="q-my-md q-mx-md" type="number" />
             <q-field filled :dense="false" disable class="q-my-md q-mx-md">
               <template v-slot:control >
-                <div v-if="peso && estatura" class="self-center full-width no-outline"> {{ (peso / (estatura * estatura)).toFixed(2) }} </div>
+                <!-- {{ (peso / (estatura * estatura)).toFixed(2) }} -->
+                <div v-if="peso && estatura" class="self-center full-width no-outline">
+                  <div v-if="(peso / (estatura * estatura)).toFixed(2) < 18.5" class="text-blue" > 
+                    {{ (peso / (estatura * estatura)).toFixed(2) }} Bajo peso 
+                  </div>
+                  <div v-if="(peso / (estatura * estatura)).toFixed(2) > 18.5 && (peso / (estatura * estatura)).toFixed(2) < 24.9" class="text-green" > 
+                    {{ (peso / (estatura * estatura)).toFixed(2) }} Normal
+                  </div>
+                  <div v-if="(peso / (estatura * estatura)).toFixed(2) > 25" class="text-orange" > 
+                    {{ (peso / (estatura * estatura)).toFixed(2) }} Sobre Peso
+                  </div>
+                </div>
               </template>
             </q-field>
             <!-- <q-input outlined v-model="imc" label="Ingrese la altura del Cliente" class="q-my-md q-mx-md" type="text" /> -->
@@ -128,6 +146,34 @@
           <q-td :props="props">
             <p style="color: green;" v-if="props.row.estado == 1">Activo</p>
             <p style="color: red;" v-else>Inactivo</p>
+          </q-td>
+        </template>
+        <template v-slot:body-cell-objetivoo="props">
+          <q-td :props="props">
+            <VTooltip placement="bottom" v-model="showTooltip">
+              <div @mouseover="showTooltip = true" @mouseleave="showTooltip = false">
+                {{ props.row.objetivo.length > 10 ? props.row.objetivo.substring(0, 10) + '...' : props.row.objetivo }}
+              </div>
+              <template #popper>
+                <div style="max-height: 200px; max-width: 200px; overflow-y: auto;" @mouseover="showTooltip = true" @mouseleave="showTooltip = false">
+                  {{ props.row.objetivo }}
+                </div>
+              </template>
+            </VTooltip>
+          </q-td>
+        </template>
+        <template v-slot:body-cell-observacioness="props">
+          <q-td :props="props">
+            <VTooltip placement="bottom" v-model="showTooltip">
+              <div @mouseover="showTooltip = true" @mouseleave="showTooltip = false">
+                {{ props.row.observaciones.length > 10 ? props.row.observaciones.substring(0, 10) + '...' : props.row.observaciones }}
+              </div>
+              <template #popper>
+                <div style="max-height: 200px; max-width: 200px; overflow-y: auto;" @mouseover="showTooltip = true" @mouseleave="showTooltip = false">
+                  {{ props.row.observaciones }}
+                </div>
+              </template>
+            </VTooltip>
           </q-td>
         </template>
         <template v-slot:body-cell-opciones="props">
@@ -183,6 +229,7 @@ import { Notify } from 'quasar';
 import { useStoreCliente } from '../stores/clientes'
 import { useStorePlan } from '../stores/planes'
 
+let showTooltip = ref(false)
 let rows = ref([])
 let alert = ref(false);
 let accion = ref(1);
@@ -250,11 +297,11 @@ let columnSeguimiento = ref([
     }
   },
   {
-    name: 'imc',
+    name: 'imcc',
     required: true,
     label: 'IMC',
     align: 'center',
-    field: 'imc',
+    field: 'imcc',
     sortable: true,
   },
   {
@@ -386,11 +433,11 @@ const columns = ref([
     sortable: true,
   },
   {
-    name: 'objetivo',
+    name: 'objetivoo',
     required: true,
     label: 'Objetivo Cliente',
     align: 'center',
-    field: 'objetivo',
+    field: 'objetivoo',
     sortable: true,
     format: (val) => {
       // Capitalizar la primera letra del responsable
@@ -398,11 +445,11 @@ const columns = ref([
     }
   },
   {
-    name: 'observaciones',
+    name: 'observacioness',
     required: true,
     label: 'Observaciones Cliente',
     align: 'center',
-    field: 'observaciones',
+    field: 'observacioness',
     sortable: true,
     format: (val) => {
       // Capitalizar la primera letra del responsable
