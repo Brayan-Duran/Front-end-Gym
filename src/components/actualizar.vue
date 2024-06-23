@@ -43,6 +43,11 @@ const route = useRoute()
 const correo = ref(route.query.correo)
 console.log(correo.value);
 
+if(!correo.value || correo.value === undefined){
+    Notify.create("No tiene permisos")
+    route.push("/")
+}
+
 let passwordLogin = ref("")
 let passwordLogin2 = ref("")
 let isPwd = ref(true);
