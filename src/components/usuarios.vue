@@ -48,7 +48,7 @@
                         @click="togglePasswordVisibility" />
                 </template>
             </q-input>
-            <q-select outlined v-model="rol" :options="['ENTRENADOR', 'RECEPCIÓN']"
+            <q-select outlined v-model="rol" :options="['ENTRENADOR', 'RECEPCION']"
                 label="Seleccione el Rol del Usuario" class="q-my-md q-mx-md" />
             <q-card-actions align="right">
                 <q-btn @click="validarUsuario()" color="red" class="text-white" :loading="useUsuario.loading">
