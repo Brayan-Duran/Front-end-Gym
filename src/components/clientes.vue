@@ -75,7 +75,10 @@
               <q-td :props="props">
                 <div v-if="parseFloat(props.row.imc) < 18.5" class="text-blue">{{ parseFloat(props.row.imc).toFixed(2) }} Bajo Peso</div>
                 <div v-if="parseFloat(props.row.imc) > 18.6 && parseFloat(props.row.imc) < 24.9" class="text-green">{{ parseFloat(props.row.imc).toFixed(2) }} Normal</div>
-                <div v-if="parseFloat(props.row.imc) >= 25" class="text-orange">{{ parseFloat(props.row.imc).toFixed(2) }} Sobre Peso</div>
+                <div v-if="parseFloat(props.row.imc) > 25 && parseFloat(props.row.imc) < 29.9" class="text-yellow">{{ parseFloat(props.row.imc).toFixed(2) }} Sobre Peso</div>
+                <div v-if="parseFloat(props.row.imc) > 30 && parseFloat(props.row.imc) < 34.9" class="text-amber">{{ parseFloat(props.row.imc).toFixed(2) }} Obesidad 1</div>
+                <div v-if="parseFloat(props.row.imc) > 35 && parseFloat(props.row.imc) < 39.9" class="text-orange">{{ parseFloat(props.row.imc).toFixed(2) }} Obesidad 2</div>
+                <div v-if="parseFloat(props.row.imc) >=40 " class="text-red">{{ parseFloat(props.row.imc).toFixed(2) }} Obesidad 3</div>
               </q-td>
             </template>
           </q-table>
@@ -114,9 +117,18 @@
                   <div v-if="(peso / (estatura * estatura)).toFixed(2) > 18.5 && (peso / (estatura * estatura)).toFixed(2) < 24.9" class="text-green" > 
                     {{ (peso / (estatura * estatura)).toFixed(2) }} Normal
                   </div>
-                  <div v-if="(peso / (estatura * estatura)).toFixed(2) > 25" class="text-orange" > 
+                  <div v-if="(peso / (estatura * estatura)).toFixed(2) > 25 && (peso / (estatura * estatura)).toFixed(2) < 29.9" class="text-yellow" > 
                     {{ (peso / (estatura * estatura)).toFixed(2) }} Sobre Peso
                   </div>
+                  <div v-if="(peso / (estatura * estatura)).toFixed(2) > 30 && (peso / (estatura * estatura)).toFixed(2) < 34.9" class="text-amber" > 
+                      {{ (peso / (estatura * estatura)).toFixed(2) }} Obesidad 1
+                </div>
+                <div v-if="(peso / (estatura * estatura)).toFixed(2) > 35 && (peso / (estatura * estatura)).toFixed(2) < 39.9" class="text-orange" > 
+                      {{ (peso / (estatura * estatura)).toFixed(2) }} Obesidad 2
+                </div>
+                <div v-if="(peso / (estatura * estatura)).toFixed(2) >= 40" class="text-red" > 
+                      {{ (peso / (estatura * estatura)).toFixed(2) }} Obesidad 3
+                </div>
                 </div>
               </template>
             </q-field>

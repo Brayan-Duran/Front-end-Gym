@@ -164,7 +164,43 @@ export const useUsuarioStore = defineStore("usuarios", () => {
         }
     }
 
-    return { listarUsuarios,listarUsuariosActivos,listarUsuariosInactivos, postUsuarios, putActivarUsuario, putUsuario, putdesactivarUsuario, login, token, loading, usuarios, user };
+    let usuarioGetEmail = async (correo) => {
+        try{
+            let res = await axios.get(`api/usuarios/correo/${correo}`)
+                return res;
+            
+        }catch (error) {
+            console.log(error);
+            return error;
+        }
+    }
+
+    let enviarEmail = async (correo) => {
+        try{
+            console.log(correo);
+            let res = await axios.post("api/usuarios/recuperar", {
+                correo: correo
+            })
+            return res
+        }catch (error){
+            return error
+        }
+    }
+
+    let usuarioPutPassword = async (correo,password) => {
+        try {
+            let res = await axios.put("api/usuarios/actualizarpass",{
+                correo: correo,
+                password: password
+            })
+            return res 
+        } catch (error) {
+            console.log(error);
+            return error
+        }
+    }
+
+    return { listarUsuarios,listarUsuariosActivos,listarUsuariosInactivos, postUsuarios, putActivarUsuario, putUsuario, putdesactivarUsuario, login, usuarioGetEmail, enviarEmail,usuarioPutPassword , token, loading, usuarios, user };
 },
     {
         persist: true,

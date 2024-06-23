@@ -3,14 +3,14 @@
 
 <q-header class="bg-primary text-white colorheader">
   <q-toolbar>
-    <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+    <q-btn v-if="useUsuario.token" dense flat round icon="menu" @click="toggleLeftDrawer" />
     <q-toolbar-title>
       <p class="rol-user">{{ usuario.rol }}</p>
     </q-toolbar-title>
   </q-toolbar>
 </q-header>
 
-<q-drawer v-model="leftDrawerOpen" side="left" overlay bordered class="side-bar scrolling-sidebar">
+<q-drawer v-if="useUsuario.token" v-model="leftDrawerOpen" side="left" overlay bordered class="side-bar scrolling-sidebar">
   <header class=header>
     <img src="../img/user.jpg" alt="" class="perfil-prueba">
     <p class="name-user">{{ usuario.nombre }}</p>
