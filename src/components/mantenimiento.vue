@@ -30,7 +30,8 @@
                         </template>
                     </q-select>
                     <q-card-actions align="right">
-                        <q-btn color="red" class="text-white" :loading="useMantenimiento.loading" @click="ListarMantenimientoMaquina()">
+                        <q-btn color="red" class="text-white" :loading="useMantenimiento.loading"
+                            @click="ListarMantenimientoMaquina()">
                             Buscar
                             <template v-slot:loading>
                                 <q-spinner color="primary" size="1em" />
@@ -123,6 +124,8 @@
                 </template>
             </q-table>
             </div>
+        <h3 class="info">{{ valor }}</h3>
+
     </div>
 </template>
 
@@ -305,12 +308,6 @@ async function listarValorMantenimiento(){
     })
     }else{
     valor.value = r.data
-    Notify.create({
-     message: r.data,
-     position: "center",
-     color: 'green',
-     timeout: 4000
-    })
     }
 }
 
@@ -461,3 +458,13 @@ onMounted(() => {
 })
 
 </script>
+
+
+<style>
+.info{
+    text-align: center;
+    color: black;
+    font-size: 30px;
+    font-weight: bold;
+}
+</style>

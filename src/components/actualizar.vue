@@ -1,6 +1,6 @@
 <template>
     <div class="cuerpo">
-        <div class="formulario" >
+        <div class="formulario" v-if="modal1" >
            <q-form @submit="cambiar" class="form">  <!-- @submit="" -->
                 <div class="candado"><i class="fas fa-lock"></i></div>
                 <h3 class="titulo">Cambio de contraseña</h3>
@@ -30,6 +30,18 @@
 
             </q-form>
         </div>
+        <div class="carta" v-if="modal2">
+            <q-card class="q-mt-md " style="width: 650px; background-color: #a5f3bc; color:black">
+                <q-card-section>
+                    <div class="visto"><i class="fas fa-check vis"></i></div>
+                    <q-card-title class="text-h4">Cambio de contraseña</q-card-title>
+                    <q-card-text>
+                        <p class="titulo-carta">¡Tu contraseña ha sido cambiada con éxito! Por favor, cierra esta ventana y vuelve al inicio.</p>
+
+                    </q-card-text>
+                </q-card-section>
+            </q-card>
+        </div>
     </div>
 </template>
 
@@ -41,6 +53,8 @@ import { useUsuarioStore } from '../stores/usuarios';
 let useUsuario = useUsuarioStore()
 const route = useRoute()
 const correo = ref(route.query.correo)
+const modal1 = ref(true);
+const modal2 = ref(false);
 console.log(correo.value);
 
 if(!correo.value || correo.value === undefined){
@@ -58,6 +72,8 @@ function cambiar() {
     if(passwordLogin.value === passwordLogin2.value){
         const res = useUsuario.usuarioPutPassword(correo.value,passwordLogin.value)
         console.log(res);
+        modal1.value = false;
+        modal2.value = true;
     }else{
         Notify.create("Las contraseñas no coinciden")
     }

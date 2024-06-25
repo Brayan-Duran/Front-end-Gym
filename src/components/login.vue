@@ -97,34 +97,46 @@ async function login2() {
 
 async function usuarioPutPassword() {
     try {
-        if(!correo.value){
+        if (!correo.value) {
             Notify.create({
                 message: "Por favor ingrese un correo",
                 position: "top",
                 color: 'red',
                 timeout: 4000
-            })
-        }else{  
-            const res = await useUsuario.usuarioGetEmail(correo.value) 
-            if(res.data.usuario){
-                const ress = await useUsuario.enviarEmail(correo.value)
+            });
+        } else {  
+            const res = await useUsuario.usuarioGetEmail(correo.value);
+            if (res.data.usuario) {
+                const ress = await useUsuario.enviarEmail(correo.value);
                 console.log(ress);
-            }else{
+                
                 Notify.create({
-                message: "El correo no es valido",
-                position: "top",
-                color: 'red',
-                timeout: 4000
-            })
+                    message: "El correo ha sido enviado exitosamente",
+                    position: "top",
+                    color: 'green',
+                    timeout: 4000
+                });
+                dialog.value = false;
+                limpiar();
+            } else {
+                Notify.create({
+                    message: "El correo no es válido",
+                    position: "top",
+                    color: 'red',
+                    timeout: 4000
+                });
             }
-            
+
+        
         }
     } catch (error) {
         console.log(error);
     }
 }
 
-
+function limpiar(){
+    correo.value = "";
+}
 
 
 </script>
@@ -146,9 +158,14 @@ async function usuarioPutPassword() {
 
 .custom-modal-bg {
     background-color: white;
+    color: black;
 
 }
 
+a{
+    color: #162938;
+    text-decoration: none;
+}
 .remember {
     font-size: 15px;
     margin-top: 18px;
