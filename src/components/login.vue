@@ -46,7 +46,6 @@
                                 </q-card>
                             </q-dialog>
                         </div>
-                        <a href="#" class="remember" @click="dialog = true">Olvidaste tu contraseña?</a>
                     </div>
                     <button class="btn" type="submit">Ingresar</button>
                 </q-form>
