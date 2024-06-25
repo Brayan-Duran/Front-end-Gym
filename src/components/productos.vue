@@ -172,7 +172,7 @@ async function listarProductoInactivo(){
 
 function validarProductos() {
     let validarnumeros = /^[0-9]+$/;
-    if (nombre.value == "") {
+    if (nombre.value == "" || nombre.value.trim().length === 0) {
         Notify.create("Se debe agregar agregar el nombre del producto");
     } else if (valor.value == "") {
         Notify.create("Se debe agregar agregar el valor del producto");
@@ -251,9 +251,9 @@ function traerProducto(producto){
 
 function validarEdicionProductos(){
     let validarnumeros = /^[0-9]+$/;
-    if (nombre.value == "") {
+    if (nombre.value == "" || nombre.value.trim().length === 0) {
         Notify.create("Se debe agregar agregar el nombre del producto");
-    } else if (valor.value == "") {
+    } else if (valor.value == "" ) {
         Notify.create("Se debe agregar agregar el valor del producto");
     } else if (!validarnumeros.test(valor.value)) {
         Notify.create("El valor del producto debe ser numerico");

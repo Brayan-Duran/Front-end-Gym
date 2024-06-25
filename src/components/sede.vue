@@ -18,7 +18,7 @@
                         type="text" />
                     <q-input outlined v-model="horario" label="Horario de la sede" class="q-my-md q-mx-md" type="time" />
                     <q-input outlined v-model="ciudad" label="Ciudad de la Sede" class="q-my-md q-mx-md" type="text" />
-                    <q-input outlined v-model="telefono" type="tel" label="Telefono" required pattern="[0-9]+"
+                    <q-input @keydown.space.prevent outlined v-model="telefono" type="tel" label="Telefono" required pattern="[0-9]+"
                         maxlength="10" class="q-my-md q-mx-md" />
                     <q-card-actions align="right">
                         <q-btn v-if="accion === 1" @click="validar()" color="red" class="text-white"
@@ -145,13 +145,13 @@ function traerInfo(sede) {
 }
 
 function validaredicion(){
-    if (nombre.value == "") {
+    if (nombre.value == "" || nombre.value.trim().length === 0) {
         Notify.create("Se debe agregar un nombre");
-    } else if (dirrecion.value == "") {
+    } else if (dirrecion.value == "" || dirrecion.value.trim().length === 0) {
         Notify.create("Se debe agregar una dirrecion");
     }  else if (horario.value == "") {
         Notify.create("Se debe agregar hora de la sede");
-    } else if (ciudad.value == "") {
+    } else if (ciudad.value == "" || ciudad.value.trim().length === 0) {
         Notify.create("Se debe agregar la ciudad de la Sede");
     } else if (telefono.value == "") {
         Notify.create("Se debe agregar un telefono");
@@ -216,13 +216,13 @@ async function desabilitarSedes(sede) {
 }
 
  function validar() {
-    if (nombre.value == "") {
+    if (nombre.value == "" || nombre.value.trim().length === 0) {
         Notify.create("Se debe agregar un nombre");
-    } else if (dirrecion.value == "") {
+    } else if (dirrecion.value == "" || dirrecion.value.trim().length === 0) {
         Notify.create("Se debe agregar una dirrecion");
     }  else if (horario.value == "") {
         Notify.create("Se debe agregar hora de la sede");
-    } else if (ciudad.value == "") {
+    } else if (ciudad.value == "" || nombre.value.trim().length === 0) {
         Notify.create("Se debe agregar la ciudad de la Sede");
     } else if (telefono.value == "") {
         Notify.create("Se debe agregar un telefono");
@@ -241,11 +241,12 @@ async function desabilitarSedes(sede) {
 }
 
 async function agregarSedes() {
+    console.log(nombre.value.trim());
     const r = await useSede.postSede({
-        nombre: nombre.value,
-        dirrecion: dirrecion.value,
-        horario: horario.value,
-        ciudad: ciudad.value,
+        nombre: nombre.value.trim(),
+        dirrecion: dirrecion.value.trim(),
+        horario: horario.value.trim(),
+        ciudad: ciudad.value.trim(),
         telefono: telefono.value
     })
     console.log(r);
@@ -303,7 +304,7 @@ const columns = ref([
     {
         name: 'horario',
         required: true,
-        label: 'Horario Sede',
+        label: 'Hora de Entrada',
         align: 'center',
         field: 'horario',
         sortable: true,

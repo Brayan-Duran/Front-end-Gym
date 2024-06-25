@@ -226,7 +226,7 @@ async function listarProductos() {
     const data = await useProducto.listarProductoActivo()
     data.data.productos.forEach(item => {
         dates = {
-            label: item.codigo,
+            label: `${item.nombre} (${item.codigo})`,
             value: item._id
         }
         productos.push(dates)
@@ -237,10 +237,10 @@ async function listarProductos() {
 function validarVentas() {
     let validarNumeros = /^[0-9]+$/;
     if (idProducto.value == "") {
-        Notify.create("Se debe agregar un ID del producto")
-    } else if (valorUnitario.value == "") {
+        Notify.create("Se debe agregar un producto")
+    } else if (valorUnitario.value == "" || valorUnitario.value.trim().length === 0) {
         Notify.create("Se debe agregar un valor unitario")
-    } else if (cantidad.value == "") {
+    } else if (cantidad.value == "" || cantidad.value.trim().length === 0) {
         Notify.create("Se debe agregar una cantidad")
     } else if (!validarNumeros.test(valorUnitario.value)) {
         Notify.create("El valor unitario debe ser un número")
@@ -311,9 +311,9 @@ function validarEdicionVenta(){
     let validarNumeros = /^[0-9]+$/;
     if (idProducto.value == "") {
         Notify.create("Se debe agregar un ID del producto")
-    } else if (valorUnitario.value == "") {
+    } else if (valorUnitario.value == "" || valorUnitario.value.trim().length === 0) {
         Notify.create("Se debe agregar un valor unitario")
-    } else if (cantidad.value == "") {
+    } else if (cantidad.value == "" || cantidad.value.trim().length === 0) {
         Notify.create("Se debe agregar una cantidad")
     } else if (!validarNumeros.test(valorUnitario.value)) {
         Notify.create("El valor unitario debe ser un número")

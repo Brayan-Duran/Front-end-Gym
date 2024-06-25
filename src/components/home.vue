@@ -69,7 +69,7 @@
       </div>
 
     </div>
-    <div v-if="usuario.rol ==='ADMIN' && usuario.rol === 'ENTRENADOR'" class="item">
+    <div v-if="usuario.rol !== 'RECEPCION'" class="item">
       <a class="opciones" href="#" @click.prevent="toggleSubMenu('equipos')">
         <i class="fas fa-weight-hanging"></i>Equipos
         <i v-if="subMenus.equipos" class="fas fa-angle-down dropdown"></i>

@@ -56,7 +56,7 @@
                 <q-card class="q-ma-sm q-pa-sm bg-my-custom-red my-card" dark bordered>
                     <q-card-section horizontal>
                         <q-card-section style="width: 60%;">
-                            <div class="text-h5 q-mt-sm q-mb-xs">Creación, activación y seguimiento de clientes</div>
+                            <div class="text-h5 q-mt-sm q-mb-xs">Creación y seguimiento de clientes</div>
                         </q-card-section>
                         <q-card-section class="col-5 text-right">
                             <q-avatar size="120px" class="bg-white">

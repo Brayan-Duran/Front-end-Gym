@@ -571,7 +571,7 @@ async function listarPlanes() {
 function validarCliente() {
   let validacionnumeros = /^[0-9]+$/;
 
-  if (nombre.value == "") {
+  if (nombre.value == "" || nombre.value.trim().length === 0) {
     Notify.create("Se debe agregar un nombre del Cliente");
 
   } else if (fechaNacimiento.value == "") {
@@ -583,17 +583,17 @@ function validarCliente() {
   } else if (!validacionnumeros.test(calculateAge.value)) {
     Notify.create("La edad debe ser un numero");
 
-  } else if (documento.value == "") {
+  } else if (documento.value == "" || documento.value.trim().length === 0) {
     Notify.create("Se debe agregar el documento del Cliente");
 
   } else if (documento.value.length <= 7) {
     Notify.create("Se debe agregar al menos 7 numeros");
   } else if (!validacionnumeros.test(documento.value)) {
     Notify.create("El documento debe ser un numero");
-  } else if (direccion.value == "") {
+  } else if (direccion.value == "" || direccion.value.trim().length === 0) {
     Notify.create("Se debe agregar la direccion del Cliente");
 
-  } else if (telefono.value == "") {
+  } else if (telefono.value == "" || telefono.value.trim().length === 0) {
     Notify.create("Se debe agregar el telefono del Cliente");
 
   } else if (telefono.value.length < 10) {
@@ -604,13 +604,13 @@ function validarCliente() {
   } else if (idPlan.value == "") {
     Notify.create("Se debe agregar el plan del Cliente");
 
-  } else if (foto.value == "") {
+  } else if (foto.value == "" || foto.value.trim().length === 0) {
     Notify.create("Se debe agregar la foto del Cliente");
 
-  } else if (objetivo.value == "") {
+  } else if (objetivo.value == "" || objetivo.value.trim().length === 0) {
     Notify.create("Se debe agregar el objetivo del Cliente");
 
-  } else if (observaciones.value == "") {
+  } else if (observaciones.value == "" || observaciones.value.trim().length === 0) {
     Notify.create("Se debe agregar las observaciones del Cliente");
 
   } else {
@@ -643,15 +643,15 @@ function limpiarSeg() {
 async function editarSeguimientoCliente() {
   try {
     console.log(peso.value);
-    if(!peso.value){
+    if(!peso.value || peso.value.trim().length === 0){
       Notify.create('Por favor ingrese un Peso')
-    }else if(!estatura.value){
+    }else if(!estatura.value || estatura.value.trim().length === 0){
       Notify.create('Por favor ingrese una altura')
-    }else if(!brazo.value){
+    }else if(!brazo.value || brazo.value.trim().length === 0){
       Notify.create('Por favor ingrese una medida de brazo')
-    }else if(!pierna.value){
+    }else if(!pierna.value || pierna.value.trim().length === 0){
       Notify.create('Por favor ingrese una medida de pierna')
-    }else if(!cintura.value){
+    }else if(!cintura.value || cintura.value.trim().length === 0){
       Notify.create('Por favor ingrese una medida de cintura')
     }else{
       let nuevoSeguimiento = {
@@ -747,7 +747,7 @@ function traerCliente(cliente) {
 function validarEdicionCliente() {
   let validacionnumeros = /^[0-9]+$/;
 
-  if (nombre.value == "") {
+  if (nombre.value == "" || nombre.value.trim().length === 0) {
     Notify.create("Se debe agregar un nombre del Cliente");
 
   } else if (fechaNacimiento.value == "") {
@@ -759,7 +759,7 @@ function validarEdicionCliente() {
   } else if (!validacionnumeros.test(calculateAge.value)) {
     Notify.create("La edad debe ser un numero");
 
-  } else if (documento.value == "") {
+  } else if (documento.value == "" || documento.value.trim().length === 0) {
     Notify.create("Se debe agregar el documento del Cliente");
 
   } else if (!validacionnumeros.test(documento.value)) {
@@ -767,7 +767,7 @@ function validarEdicionCliente() {
   } else if (direccion.value == "") {
     Notify.create("Se debe agregar la direccion del Cliente");
 
-  } else if (telefono.value == "") {
+  } else if (telefono.value == "" || nombre.value.trim().length === 0) {
     Notify.create("Se debe agregar el telefono del Cliente");
 
   } else if (!validacionnumeros.test(telefono.value)) {
@@ -776,13 +776,13 @@ function validarEdicionCliente() {
   } else if (idPlan.value == "") {
     Notify.create("Se debe agregar el plan del Cliente");
 
-  } else if (foto.value == "") {
+  } else if (foto.value == "" || foto.value.trim().length === 0) {
     Notify.create("Se debe agregar la foto del Cliente");
 
-  } else if (objetivo.value == "") {
+  } else if (objetivo.value == "" || objetivo.value.trim().length === 0) {
     Notify.create("Se debe agregar el objetivo del Cliente");
 
-  } else if (observaciones.value == "") {
+  } else if (observaciones.value == "" || observaciones.value.trim().length === 0) {
     Notify.create("Se debe agregar las observaciones del Cliente");
 
   } else {

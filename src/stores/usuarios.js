@@ -154,12 +154,21 @@ export const useUsuarioStore = defineStore("usuarios", () => {
             return res;
         } catch (error) {
             console.log(error);
-            Notify.create({
-                message: "El correo o la cotraseña son incorrectas",
-                position: "top",
-                color: 'red',
-                timeout: 4000
-            })
+            if(error.response.status === 401){
+                Notify.create({
+                    message: "Usuario Inactivo",
+                    position: "top",
+                    color: 'red',
+                    timeout: 4000
+                })
+            }else{
+                Notify.create({
+                    message: "El correo o la cotraseña son incorrectas",
+                    position: "top",
+                    color: 'red',
+                    timeout: 4000
+                })
+            }
             return error;
         }
     }

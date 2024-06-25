@@ -349,8 +349,10 @@ async function listarSedes() {
   const data = await useSede.listarSedesActivo()
   data.data.sede.forEach(item => { 
     dates = {
-      label: item.codigo,
+      label: `${item?.nombre} (${item.codigo}) `,
       value: item._id
+
+
     };
     sedes.push(dates);
   });
@@ -361,26 +363,26 @@ function validarUsuario() {
     let validacionnumeros = /^[0-9]+$/;
     let validacionCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (idsede.value == "") {
-        Notify.create("Se debe agregar un id de la Sede");
-    } else if (nombre.value == "") {
+        Notify.create("Se debe agregar una Sede");
+    } else if (nombre.value == "" || nombre.value.trim().length === 0) {
         Notify.create("Se debe agregar un nombre de Usuario");
-    } else if (direccion.value == "") {
+    }else if (direccion.value == "" || direccion.value.trim().length === 0) {
         Notify.create("Se debe agregar una direccion de Usuario");
     } else if (horario.value == "") {
         Notify.create("Se debe agregar un horario de entrada");
-    } else if (ciudad.value == "") {
+    } else if (ciudad.value == "" || ciudad.value.trim().length === 0) {
         Notify.create("Se debe agregar una ciudad");
     } else if (telefono.value == "") {
         Notify.create("Se debe agregar un telefono");
     } else if (!validacionnumeros.test(telefono.value)) {
         Notify.create("El telefono solo debe contener numeros");
 
-    } else if (correo.value == "") {
+    } else if (correo.value == "" || correo.value.trim().length === 0) {
         Notify.create("Se debe agregar un correo");
     } else if (!validacionCorreo.test(correo.value)) {
         Notify.create("Debe agregar un correo que sea valido");
 
-    } else if (password.value == "") {
+    } else if (password.value == "" || password.value.trim().length === 0) {
         Notify.create("Se debe agregar una contraseña");
     } else if (rol.value == "") {
         Notify.create("Se debe agregar un rol");
@@ -460,14 +462,14 @@ function validarEdicionUsuario() {
     let validacionnumeros = /^[0-9]+$/;
    
     if (idsede.value == "") {
-        Notify.create("Se debe agregar un id de la Sede");
-    } else if (nombre.value == "") {
+        Notify.create("Se debe agregar una Sede");
+    } else if (nombre.value == "" || nombre.value.trim().length === 0) {
         Notify.create("Se debe agregar un nombre de Usuario");
-    } else if (direccion.value == "") {
+    } else if (direccion.value == "" || direccion.value.trim().length === 0) {
         Notify.create("Se debe agregar una direccion de Usuario");
     } else if (horario.value == "") {
         Notify.create("Se debe agregar un horario de entrada");
-    } else if (ciudad.value == "") {
+    } else if (ciudad.value == "" || nombre.value.trim().length === 0) {
         Notify.create("Se debe agregar una ciudad");
     } else if (telefono.value == "") {
         Notify.create("Se debe agregar un telefono");

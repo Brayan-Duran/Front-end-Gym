@@ -208,8 +208,9 @@ const options = ref(planes)
 const opciones = ref(clientes)
 
 const listarClientes = async () => {
-    const data = await useCliente.listarClientesActivos();
-    data.data.Clientes.forEach(item => {
+    const data = await useCliente.listarClientes();
+    console.log(data);
+    data.data.clientes.forEach(item => {
         datesClientes = {
             label: `${item?.nombre} (${item?.documento})`,
             value: item._id

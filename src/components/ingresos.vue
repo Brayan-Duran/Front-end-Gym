@@ -235,7 +235,7 @@ const listarSedes = async () => {
     const data = await useSede.listarSedesActivo();
     data.data.sede.forEach(item => {
         datesSedes = {
-            label: item.codigo,
+            label: `${item?.nombre} (${item?.codigo})`,
             value: item._id
         }
         sedes.push(datesSedes)
@@ -256,9 +256,9 @@ const listarClientes = async () => {
 
 function validarIngreso() {
     if (idsede.value == "") {
-        Notify.create("Se debe agregar un id de la Sede");
+        Notify.create("Se debe agregar una Sede");
     } else if (idcliente.value == "") {
-        Notify.create("Se debe agregar un id del Cliente");
+        Notify.create("Se debe agregar un Cliente");
     } else {
         agregaringreso()
         limpiar()

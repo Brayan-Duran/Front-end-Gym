@@ -331,13 +331,13 @@ function validarMantenimiento() {
     let validacionnumeros = /^[0-9]+$/;
 
     if (idMaquina.value == "") {
-        Notify.create("Se debe agregar un id de la Maquina");
-    } else if (descripcion == "") {
+        Notify.create("Se debe agregar nombre Maquina");
+    } else if (descripcion == "" || descripcion.value.trim().length === 0) {
         Notify.create("Se debe agregar una descripcion del mantenimiento");
-    } else if (responsable == "") {
+    } else if (responsable == "" || responsable.value.trim().length === 0) {
         Notify.create("Se debe agregar un responsable del mantenimiento");
 
-    } else if (precio == "") {
+    } else if (precio == "" || precio.value.trim().length === 0) {
         Notify.create("Se debe agregar un precio del mantenimiento");
     } else if (!validacionnumeros.test(precio.value)) {
         Notify.create("El precio debe ser un numero");
@@ -391,9 +391,9 @@ function validarEdicionMantenimiento() {
 
     if (idMaquina.value == "") {
         Notify.create("Se debe agregar un id de la Maquina");
-    } else if (descripcion == "") {
+    } else if (descripcion == "" || descripcion.value.trim().length === 0) {
         Notify.create("Se debe agregar una descripcion del mantenimiento");
-    } else if (responsable == "") {
+    } else if (responsable == "" || responsable.value.trim().length === 0) {
         Notify.create("Se debe agregar un responsable del mantenimiento");
 
     } else if (precio == "") {
