@@ -429,16 +429,22 @@ async function habilitarUsuaro(usuario) {
 }
 
 async function deshabilitarUsuario(usuario) {
-    const res = await useUsuario.putdesactivarUsuario(usuario._id)
-        .then((response) => {
-            console.log(response);
-            listarUsuarios()
-        })
 
-        .catch((error) => {
-            console.error('Error de Usuario', error);
-            Notify.create('Error al deshabilitar el Usuario')
-        })
+    if(useUsuario.user._id === usuario._id){
+        Notify.create("No puedes desactivar la cuenta en uso");
+    }else{
+        const res = await useUsuario.putdesactivarUsuario(usuario._id)
+            .then((response) => {
+                console.log(response);
+                listarUsuarios()
+            })
+    
+            .catch((error) => {
+                console.error('Error de Usuario', error);
+                Notify.create('Error al deshabilitar el Usuario')
+            })    
+    }
+
 
 }
 

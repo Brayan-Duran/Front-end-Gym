@@ -199,7 +199,7 @@ async function listarSedes() {
   const data = await useSede.listarSedesActivo()
   data.data.sede.forEach(item => { // se puede lograr de esta forma directamente en el componente
     dates = {
-      label: item.codigo,
+      label: `${item?.nombre} (${item?.codigo})`,
       value: item._id
     };
     sedes.push(dates);

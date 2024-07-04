@@ -47,9 +47,18 @@
             </q-dialog>
         </div>
         <div style="display: flex; justify-content: center">
-            <q-table title="Ventas" title-class="text-red text-weight-bolder text-h4"
+            <q-table :filter="fil" title="Ventas" title-class="text-red text-weight-bolder text-h4"
                 table-header-class="text-black font-weight-bold" :rows="rows" :columns="columns" row-key="name"
                 style="width: 90%;">
+
+                <template v-slot:top-right>
+                    <q-input color="black" v-model="fil" placeholder="Buscar">
+                      <template v-slot:append>
+                        <q-icon name="search" />
+                     </template>
+                    </q-input>
+                </template>
+
                 <template v-slot:body-cell-estado="props">
                     <q-td :props="props">
                         <p style="color: green;" v-if="props.row.estado == 1">Activo</p>
@@ -99,6 +108,7 @@ let accion = ref('')
 let idProducto = ref('')
 let valorUnitario = ref('')
 let cantidad = ref('')
+const fil = ref("")
 
 function abrir() {
     accion.value = 1
@@ -234,7 +244,7 @@ async function listarProductos() {
     console.log(productos);
 }
 
-function validarVentas() {
+async function validarVentas() {
     let validarNumeros = /^[0-9]+$/;
     if (idProducto.value == "") {
         Notify.create("Se debe agregar un producto")
@@ -247,13 +257,15 @@ function validarVentas() {
     } else if (!validarNumeros.test(cantidad.value)) {
         Notify.create("La cantidad debe ser un número")
     } else {
-        agregarVentas()
-            limpiar()
-            cerrar()
-            Notify.create({
+      const r = await  agregarVentas()
+      if(r !== undefined){
+        Notify.create({
                 type: "positive",
                 message: "Venta agregada exitosamente",
             })
+      }
+            limpiar()
+            cerrar()
     }
 }
 
@@ -266,6 +278,7 @@ async function agregarVentas() {
     listarVentas()
     cerrar()
     console.log(r);
+    return r
 }
 
 async function habilitarVentas(venta){
@@ -311,9 +324,9 @@ function validarEdicionVenta(){
     let validarNumeros = /^[0-9]+$/;
     if (idProducto.value == "") {
         Notify.create("Se debe agregar un ID del producto")
-    } else if (valorUnitario.value == "" || valorUnitario.value.trim().length === 0) {
+    } else if (valorUnitario.value == "") {
         Notify.create("Se debe agregar un valor unitario")
-    } else if (cantidad.value == "" || cantidad.value.trim().length === 0) {
+    } else if (cantidad.value == "") {
         Notify.create("Se debe agregar una cantidad")
     } else if (!validarNumeros.test(valorUnitario.value)) {
         Notify.create("El valor unitario debe ser un número")

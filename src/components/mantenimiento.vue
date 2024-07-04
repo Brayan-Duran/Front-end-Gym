@@ -288,20 +288,31 @@ async function ListarMantenimientosInactivos() {
 }
 
 async function ListarMantenimientoMaquina() {
-    console.log(idMaquina.value.value);
-    const r = await useMantenimiento.listarMantenimientoMaquina(idMaquina.value.value)
-    console.log(r);
-    console.log(r.data);
-    rows.value = r.data.reverse();
+    try {
+        console.log(idMaquina.value.value);
+        const r = await useMantenimiento.listarMantenimientoMaquina(idMaquina.value.value)
+        console.log(r);
+        console.log(r.data);
+        rows.value = r.data.reverse();
+        Notify.create({
+            message: "Busqueda Existosa",
+            position: "top",
+            color: 'green',
+            timeout: 3000
+            })
+            cerrar2()
+    } catch (error) {
+        console.error("Error al realizar la busqueda");
+    }
 }
 
 async function listarValorMantenimiento(){
     const r = await useMantenimiento.listarValorMantenimiento(fechaInicio.value, fechaFin.value)
     console.log(r);
-    if(r.data.message){
-        valor.value = r.data.message
+    if(r.data.msg){
+        valor.value = r.data.msg
         Notify.create({
-     message: r.data.message,
+     message: r.data.msg,
      position: "center",
      color: 'red',
      timeout: 4000
@@ -309,13 +320,16 @@ async function listarValorMantenimiento(){
     }else{
     valor.value = r.data
     }
+    if(r.data.data){
+        rows.value = r.data.data.reverse();
+    }
 }
 
 async function listarMaquinas() {
     const data = await useMaquina.listarMaquinasActivos()
     data.data.maquinas.forEach(item => {
         dates = {
-            label: item.codigo,
+            label: `${item?.idsede.nombre} (${item?.codigo})`,
             value: item._id
         };
         maquinas.push(dates);

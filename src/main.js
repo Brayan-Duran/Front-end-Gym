@@ -11,7 +11,7 @@ import App from './App.vue'
 import FloatingVue from 'floating-vue'
 import 'floating-vue/dist/style.css'
 
-axios.defaults.baseURL = "https://road-agreeable-ear.glitch.me/";
+axios.defaults.baseURL = "https://glitter-rustic-dingo.glitch.me/";
 
 // axios.defaults.baseURL = "http://localhost:4500/"
 

@@ -10,7 +10,7 @@
                 <q-card class="" style="width: 700px">
                     <q-card-section style="background-color: #a1312d; margin-bottom: 20px">
                         <div class="text-h6 text-white">
-                            {{ accion == 1 ? "Agregar Plan" : "Editar Plan" }}
+                            {{ accion == 1 ? "Agregar Producto" : "Editar Producto" }}
                         </div>
                     </q-card-section>
                     <q-input outlined v-model="nombre" label="Agrega un nombre al producto" class="q-my-md q-mx-md"
@@ -38,9 +38,18 @@
             </q-dialog>
         </div>
         <div style="display: flex; justify-content: center">
-            <q-table title="Productos" title-class="text-red text-weight-bolder text-h4"
+            <q-table :filter="fil" title="Productos" title-class="text-red text-weight-bolder text-h4"
                 table-header-class="text-black font-weight-bold" :rows="rows" :columns="columns" row-key="name"
                 style="width: 90%;">
+
+                <template v-slot:top-right>
+                  <q-input color="black" v-model="fil" placeholder="Buscar">
+                    <template v-slot:append>
+                        <q-icon name="search" />
+                    </template>
+                  </q-input>
+                 </template>
+
                 <template v-slot:body-cell-estado="props">
                     <q-td :props="props">
                         <p style="color: green;" v-if="props.row.estado == 1">Activo</p>
@@ -90,6 +99,7 @@ let id = ref('');
 let nombre = ref('')
 let valor = ref('')
 let cantidad = ref('')
+const fil = ref("")
 
 const columns = ref([
     {

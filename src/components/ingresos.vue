@@ -54,10 +54,17 @@
             </q-dialog>
         </div>
         <div style="display: flex; justify-content: center">
-            <q-table title="Ingresos" title-class="text-red text-weight-bolder text-h4"
+            <q-table :filter="fil" title="Ingresos" title-class="text-red text-weight-bolder text-h4"
                 table-header-class="text-black font-weight-bold" :rows="rows" :columns="columns" row-key="name"
                 style="width: 90%;">
 
+                <template v-slot:top-right>
+                 <q-input color="black" v-model="fil" placeholder="Buscar">
+                    <template v-slot:append>
+                        <q-icon name="search" />
+                    </template>
+                 </q-input>
+                </template>
 
                 <template v-slot:body-cell-estado="props">
                     <q-td :props="props">
@@ -192,6 +199,7 @@ let clientes = [];
 let datesClientes = {};
 const options = ref(sedes)
 const opciones = ref(clientes)
+const fil = ref("")
 
 
 const filterFn = (val, update) => {
