@@ -168,11 +168,6 @@
                 Seguimientos de {{ nombreSeg }} 
               </div>
             </q-card-section>
-            <q-card-section class="text-rigth col-5">
-              <q-avatar size="50px">
-                <img :src="imgCliente">
-              </q-avatar>
-            </q-card-section>
           </q-card-section>
             <q-input outlined v-model="peso" label="Ingrese el peso del Cliente" class="q-my-md q-mx-md" type="number" />
             <q-input outlined v-model="estatura" label="Ingrese la altura del Cliente" class="q-my-md q-mx-md" type="number" />
