@@ -187,7 +187,7 @@ let alerta = ref(false)
 
 function cerrar2(){
 alerta.value = false
-
+limpiar()
 }
 
 function abrir() {

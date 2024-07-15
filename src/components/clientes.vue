@@ -37,7 +37,8 @@
               </q-item>
             </template>
           </q-select>
-          <q-input outlined v-model="foto" label="Ingrese la foto del Cliente" class="q-my-md q-mx-md" type="text" />
+          <q-input outlined v-model="foto" v-if="editt === true" disable label="Ingrese la foto del Cliente" class="q-my-md q-mx-md" type="text" />
+          <q-input outlined v-model="foto" v-if="editt === false" label="Ingrese la foto del Cliente" class="q-my-md q-mx-md" type="text" />
           <q-input autogrow outlined v-model="objetivo" label="Ingrese el objetivo del Cliente" class="q-my-md q-mx-md"
             type="text" />
           <q-input autogrow outlined v-model="observaciones" label="Ingrese las observacionesdel Cliente" class="q-my-md q-mx-md"
@@ -79,6 +80,15 @@
                 <div v-if="parseFloat(props.row.imc) > 30 && parseFloat(props.row.imc) < 34.9" class="text-amber">{{ parseFloat(props.row.imc).toFixed(2) }} Obesidad 1</div>
                 <div v-if="parseFloat(props.row.imc) > 35 && parseFloat(props.row.imc) < 39.9" class="text-orange">{{ parseFloat(props.row.imc).toFixed(2) }} Obesidad 2</div>
                 <div v-if="parseFloat(props.row.imc) >=40 " class="text-red">{{ parseFloat(props.row.imc).toFixed(2) }} Obesidad 3</div>
+              </q-td>
+            </template>
+            <template v-slot:body-cell-opciones="props">
+              <q-td :props="props">
+                <q-btn color="primary" @click="traerSeg(props.row)"><i class="fas fa-pencil-alt"></i>
+                <q-tooltip>
+                  Editar
+                </q-tooltip>
+              </q-btn>
               </q-td>
             </template>
           </q-table>
@@ -144,6 +154,65 @@
               </template>
             </q-btn>
             <q-btn label="Cerrar" color="black" outline @click="modalInfoSeg = false" />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+    </div>
+
+    <div>
+      <q-dialog v-model="modalSegui" persistent>
+        <q-card style="width: 800px;">
+          <q-card-section horizontal style="background-color: #a1312d; margin-bottom: 20px">
+            <q-card-section>
+              <div class="text-h6 text-white">
+                Seguimientos de {{ nombreSeg }} 
+              </div>
+            </q-card-section>
+            <q-card-section class="text-rigth col-5">
+              <q-avatar size="50px">
+                <img :src="imgCliente">
+              </q-avatar>
+            </q-card-section>
+          </q-card-section>
+            <q-input outlined v-model="peso" label="Ingrese el peso del Cliente" class="q-my-md q-mx-md" type="number" />
+            <q-input outlined v-model="estatura" label="Ingrese la altura del Cliente" class="q-my-md q-mx-md" type="number" />
+            <q-field filled :dense="false" disable class="q-my-md q-mx-md">
+              <template v-slot:control >
+                <!-- {{ (peso / (estatura * estatura)).toFixed(2) }} -->
+                <div v-if="peso && estatura" class="self-center full-width no-outline">
+                  <div v-if="(peso / (estatura * estatura)).toFixed(2) < 18.5" class="text-blue" > 
+                    {{ (peso / (estatura * estatura)).toFixed(2) }} Bajo peso 
+                  </div>
+                  <div v-if="(peso / (estatura * estatura)).toFixed(2) > 18.5 && (peso / (estatura * estatura)).toFixed(2) < 24.9" class="text-green" > 
+                    {{ (peso / (estatura * estatura)).toFixed(2) }} Normal
+                  </div>
+                  <div v-if="(peso / (estatura * estatura)).toFixed(2) > 25 && (peso / (estatura * estatura)).toFixed(2) < 29.9" class="text-yellow" > 
+                    {{ (peso / (estatura * estatura)).toFixed(2) }} Sobre Peso
+                  </div>
+                  <div v-if="(peso / (estatura * estatura)).toFixed(2) > 30 && (peso / (estatura * estatura)).toFixed(2) < 34.9" class="text-amber" > 
+                      {{ (peso / (estatura * estatura)).toFixed(2) }} Obesidad 1
+                </div>
+                <div v-if="(peso / (estatura * estatura)).toFixed(2) > 35 && (peso / (estatura * estatura)).toFixed(2) < 39.9" class="text-orange" > 
+                      {{ (peso / (estatura * estatura)).toFixed(2) }} Obesidad 2
+                </div>
+                <div v-if="(peso / (estatura * estatura)).toFixed(2) >= 40" class="text-red" > 
+                      {{ (peso / (estatura * estatura)).toFixed(2) }} Obesidad 3
+                </div>
+                </div>
+              </template>
+            </q-field>
+            <!-- <q-input outlined v-model="imc" label="Ingrese la altura del Cliente" class="q-my-md q-mx-md" type="text" /> -->
+            <q-input outlined v-model="brazo" label="Ingrese la medida de brazo del Cliente" class="q-my-md q-mx-md" type="tel" required pattern="[0-9]+" maxlength="10" />
+            <q-input outlined v-model="pierna" label="Ingrese la medida de pierna del Cliente" class="q-my-md q-mx-md" type="text" />
+            <q-input outlined v-model="cintura" label="Ingrese la medida de cintura del Cliente" class="q-my-md q-mx-md" type="tel" required pattern="[0-9]+" maxlength="10" />
+          <q-card-actions align="right">
+            <q-btn  @click="editarSeg()" color="red" class="text-white"
+              :loading="useCliente.loading">Editar
+              <template v-slot:loading>
+                <q-spinner color="primary" size="1em" />
+              </template>
+            </q-btn>
+            <q-btn label="Cerrar" color="black" outline @click="modalSegui = false, editt.value = false" />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -260,6 +329,7 @@ let seguimientoModel = ref(false)
 let seguimiento = ref([]);
 let nombreSeg = ref("")
 let modalInfoSeg = ref(false);
+let modalSegui = ref(false);
 let fechaSeg = ref("")
 let peso = ref("")
 let estatura = ref("")
@@ -270,6 +340,8 @@ let idSeg = ref("")
 let today = new Date().toISOString().split('T')[0]
 const birthDate = ref(null);
 let imgCliente = ref("")
+let idSegui = ref("")
+let editt = ref(false)
 
 let columnSeguimiento = ref([
 {
@@ -302,11 +374,7 @@ let columnSeguimiento = ref([
     label: 'Altura',
     align: 'center',
     field: 'estatura',
-    sortable: true,
-    format: (val) => {
-      // Capitalizar la primera letra del responsable
-      return (val / 100).toFixed(2)
-    }
+    sortable: true
   },
   {
     name: 'imcc',
@@ -339,7 +407,15 @@ let columnSeguimiento = ref([
     align: 'center',
     field: 'cintura',
     sortable: true,
-  }
+  },
+  {
+    name: 'opciones',
+    required: true,
+    label: 'Opciones',
+    align: 'center',
+    field: 'opciones',
+    sortable: true
+  },
 ])
 
 const useCliente = useStoreCliente()
@@ -354,6 +430,8 @@ function abrir() {
 
 function cerrar() {
   alert.value = false;
+  limpiar()
+  editt.value = false
 }
 
 const columns = ref([
@@ -509,6 +587,21 @@ function traerData (data) {
   nombreSeg.value = data.nombre
   imgCliente.value = data.foto
   console.log(data.foto);
+  limpiarSeg()
+}
+
+function traerSeg (data) {
+  modalSegui.value = true
+  // nombreSeg.value = data.nombre
+  // imgCliente.value = data.foto
+  peso.value = data.peso
+  estatura.value = data.estatura
+  brazo.value = data.brazo
+  pierna.value = data.pierna
+  cintura.value = data.cintura
+  idSegui.value = data._id
+  console.log(data);
+  limpiar()
 }
 
 
@@ -727,6 +820,7 @@ async function deshabilitarCliente(cliente) {
 
 function traerCliente(cliente) {
   accion.value = 2
+  editt.value = true
   alert.value = true;
   id.value = cliente._id
   nombre.value = cliente.nombre
@@ -797,6 +891,47 @@ function validarEdicionCliente() {
 
 }
 
+async function editarSeg() {
+  try {
+    console.log(peso.value);
+    if(!peso.value || peso.value.trim().length === 0){
+      Notify.create('Por favor ingrese un Peso')
+    }else if(!estatura.value || estatura.value.trim().length === 0){
+      Notify.create('Por favor ingrese una altura')
+    }else if(!brazo.value || brazo.value.trim().length === 0){
+      Notify.create('Por favor ingrese una medida de brazo')
+    }else if(!pierna.value || pierna.value.trim().length === 0){
+      Notify.create('Por favor ingrese una medida de pierna')
+    }else if(!cintura.value || cintura.value.trim().length === 0){
+      Notify.create('Por favor ingrese una medida de cintura')
+    }else{
+      for (let i = 0; i < seguimiento.value.length; i++) {
+        const info = seguimiento.value[i];
+        if(info._id === idSegui.value){
+        
+        info.peso= peso.value,
+        info.estatura= estatura.value,
+        info.brazo= brazo.value,
+        info.pierna= pierna.value,
+        info.cintura= cintura.value,
+        info.imc= `${peso.value / (estatura.value * estatura.value)}`
+        console.log(info);
+        break
+        }
+      }
+      console.log(seguimiento.value);
+      modalSegui.value = false
+       await useCliente.putCliente(idSeg.value, {
+         seguimiento: seguimiento.value
+       })
+      listarClientes()
+      limpiarSeg()
+    }
+  } catch (error) {
+    console.error('Error de cliente', error)
+    Notify.create('Ocurrio un error al editar el cliente')
+  }
+}
 
 async function editarcliente() {
   try {

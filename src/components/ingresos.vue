@@ -2,6 +2,7 @@
     <div>
         <div style="margin-left: 5%; text-align: end; margin-right: 5%">
             <q-btn color="green" class="q-my-md q-ml-md" @click="abrir()">Agregar Ingreso</q-btn>
+            <q-btn color="green" class="q-my-md q-ml-md" @click="listarIngresos()">Listar Ingresos</q-btn>
             <q-btn color="green" class="q-my-md q-ml-md" @click="listarIngresoctivo()">Listar Ingreso Activo</q-btn>
             <q-btn color="green" class="q-my-md q-ml-md" @click=" listarIngresoinactivo()">Listar Ingreso Inactivo</q-btn>
         </div>

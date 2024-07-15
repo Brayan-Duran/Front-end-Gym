@@ -117,6 +117,7 @@ function abrir() {
 
 function cerrar() {
     alert.value = false
+    limpiar()
 }
 
 const columns = ref([
@@ -336,24 +337,33 @@ function validarEdicionVenta(){
      editarVentas()
      cerrar()
         limpiar()
-
-            Notify.create({
-                type: "positive",
-                message: "Venta editada exitosamente",
-            })
     }
 
 }
 
 async function editarVentas(){
     try{
-        await useVenta.putVenta(id.value,{
+
+      const r =  await useVenta.putVenta(id.value,{
             idProducto: idProducto.value.value,
             valorUnitario: valorUnitario.value,
             cantidad: cantidad.value
         })
+        console.log(r);
+              if(r.data.message === "Edicion exitosa"){
+                Notify.create({
+                    type: "positive",
+                    message: "Venta editada exitosamente",
+                   
+                });
+              }else{
+            Notify.create({
+                type: "negative",
+                message: r.data.message
+            })
+              }
         listarVentas()
-
+        limpiar()
     }catch (error){
         console.log('Error al editar la venta', error);
         Notify.create("Ocurrio un error al editar la venta")
@@ -364,7 +374,6 @@ function limpiar() {
     idProducto.value = ''
     valorUnitario.value = ''
     cantidad.value = ''
-
 }
 
 onMounted(() => {
