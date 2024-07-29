@@ -2,6 +2,7 @@
     <div> <!--v-if="useUsuario.token"-->
         <div style="margin-left: 5%; text-align: end; margin-right: 5%">
             <q-btn color="green" class="q-my-md q-ml-md" @click="abrir()">Agregar Sedes</q-btn>
+            <q-btn color="green" class="q-my-md q-ml-md" @click="listarSedes()">Listar Sedes</q-btn>
             <q-btn color="green" class="q-my-md q-ml-md" @click="listarSedesActivo()">Listar Sedes Activas</q-btn>
             <q-btn color="green" class="q-my-md q-ml-md" @click="listarSedesInactivas()">Listar Sedes Inactivas</q-btn>
         </div>
